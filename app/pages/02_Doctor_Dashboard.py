@@ -1,11 +1,19 @@
 import json
 from pathlib import Path
-from datetime import datetime
 
 import streamlit as st
 import pandas as pd
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
+
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]  # корень проекта
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from app.core.generator import generate_output
 
 
 BASE = Path(__file__).resolve().parents[2]
@@ -45,7 +53,6 @@ if not uploaded:
 
 intake = json.loads(uploaded.read().decode("utf-8"))
 
-# --- Validate intake ---
 try:
     validate(instance=intake, schema=INTAKE_SCHEMA)
     st.success("Intake JSON is valid.")
@@ -54,7 +61,6 @@ except ValidationError as e:
 
 st.divider()
 
-# --- Header summary ---
 age = safe_get(intake, "patient", "age_years", default="unknown")
 sex = safe_get(intake, "patient", "sex", default="unknown")
 chief = safe_get(intake, "visit", "chief_complaint_category", default="unknown")
@@ -66,14 +72,12 @@ c1, c2, c3 = st.columns(3)
 c1.metric("Age", age)
 c2.metric("Sex", sex)
 c3.metric("Chief complaint", chief)
-
 st.write(f"**Start:** {started}   |   **Today:** {today}")
 if free:
     st.write(f"**Short note:** {free}")
 
 st.divider()
 
-# --- Risk flags (rule-based) ---
 risk_level = safe_get(intake, "risk_flags_rule_based", "risk_level", default="LOW")
 risk_flags = safe_get(intake, "risk_flags_rule_based", "flags", default=[])
 
@@ -86,7 +90,6 @@ else:
 
 st.divider()
 
-# --- Timeline ---
 st.subheader("Timeline (by dates)")
 events = safe_get(intake, "timeline", "events", default=[])
 if events:
@@ -101,20 +104,17 @@ else:
 
 st.divider()
 
-# --- Temperature ---
 st.subheader("Temperature graph")
 temp_graph = safe_get(intake, "measurements", "temperature", "graph", default=[])
 if temp_graph:
     df_temp = pd.DataFrame(temp_graph).copy()
     df_temp["date"] = pd.to_datetime(df_temp["date"], errors="coerce")
-    # build sortable key
     order = {"morning": 0, "day": 1, "evening": 2, "night": 3}
     df_temp["tod_order"] = df_temp["time_of_day"].map(order).fillna(99).astype(int)
     df_temp = df_temp.sort_values(["date", "tod_order"])
     df_temp["label"] = df_temp["date"].dt.strftime("%Y-%m-%d") + " " + df_temp["time_of_day"]
 
     st.dataframe(df_temp[["label", "value_c", "antipyretic_taken"]], use_container_width=True)
-
     chart_df = df_temp.set_index("label")[["value_c"]]
     st.line_chart(chart_df)
 else:
@@ -122,7 +122,6 @@ else:
 
 st.divider()
 
-# --- Attachments ---
 st.subheader("Attachments")
 atts = safe_get(intake, "attachments", default=[]) or []
 if not atts:
@@ -148,54 +147,31 @@ else:
 
 st.divider()
 
-# --- Generate Output (still placeholder) ---
-st.subheader("Generate Output (placeholder)")
-st.warning("Next step: connect MedGemma and enforce JSON-only output.")
+st.subheader("Generate Output (MedGemma)")
+st.caption("Default=stub. For real model: set MODEL_PROVIDER=transformers + MODEL_ID in .env.")
 
-missing = []
-if chief == "fever" and not temp_graph:
-    missing.append("Fever selected but no temperature measurements provided.")
-if not events:
-    missing.append("Timeline is missing (add at least one dated event).")
-
-# Build timeline text
-if events:
-    timeline_lines = []
-    for e in events:
-        line = f"{e.get('date')} | {e.get('symptom_type')} | {e.get('change')} | {(e.get('character') or '')}"
-        timeline_lines.append(line)
-    timeline_text = "- " + "\n- ".join(timeline_lines)
-else:
-    timeline_text = "unknown"
-
-draft_note_text = (
-    f"[Patient] Age: {age} Sex: {sex} Date: {today}\n"
-    f"[Reason] {chief} {('- ' + free) if free else ''}\n\n"
-    "1) Timeline (by dates)\n"
-    f"{timeline_text}\n\n"
-    "2) Temperature (graph)\n"
-    f"{'see chart/table' if temp_graph else 'unknown'}\n\n"
-    "3) Attachments\n"
-    f"{', '.join([x.get('type','') for x in atts]) if atts else 'none'}\n\n"
-    "NOTE: Draft only. No diagnosis/treatment. Clinician review required."
-)
-output = {"draft_note": draft_note_text}
-
-# validate placeholder output against schema
-try:
-    validate(instance=output, schema=OUTPUT_SCHEMA)
-    st.success("Output JSON (placeholder) matches schema.")
-except ValidationError as e:
-    st.error(f"Output JSON does NOT match schema: {e.message}")
-
-st.code(json.dumps(output, indent=2, ensure_ascii=False), language="json")
-
-st.download_button(
-    "Download output.json",
-    data=json.dumps(output, indent=2, ensure_ascii=False),
-    file_name="output.json",
-    mime="application/json",
-)
+if st.button("Generate output.json"):
+    with st.spinner("Generating..."):
+        try:
+            out, raw = generate_output(
+                intake=intake,
+                output_schema=OUTPUT_SCHEMA,
+                risk_level=risk_level,
+                risk_flags=risk_flags,
+                prompts_dir=str(BASE / "prompts")
+            )
+            st.success("Generated output.json (schema-valid).")
+            st.code(json.dumps(out, indent=2, ensure_ascii=False), language="json")
+            st.download_button(
+                "Download output.json",
+                data=json.dumps(out, indent=2, ensure_ascii=False),
+                file_name="output.json",
+                mime="application/json",
+            )
+            with st.expander("Raw model text"):
+                st.text(raw)
+        except Exception as e:
+            st.error(str(e))
 
 with st.expander("Raw Intake JSON"):
     st.code(json.dumps(intake, indent=2, ensure_ascii=False), language="json")

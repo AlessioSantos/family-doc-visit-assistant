@@ -1,0 +1,6 @@
+# Add these to requirements.txt for Step 5
+pandas>=2.0
+transformers>=4.41
+accelerate>=0.33
+safetensors>=0.4
+sentencepiece>=0.2
