@@ -1,24 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Output",
+  "$id": "https://example.org/schemas/output.schema.json",
+  "title": "FamilyDoctorOutput",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "summary",
     "draft_note",
-    "missing_info"
+    "missing_info",
+    "safety"
   ],
   "properties": {
     "summary": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 2500
     },
     "draft_note": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 8000
     },
     "missing_info": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "maxItems": 5
+    },
+    "followup_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 5
     },
     "risk_level": {
       "type": "string",
@@ -31,8 +44,63 @@
     },
     "risk_flags": {
       "type": "array",
+      "maxItems": 20,
       "items": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "CHEST_PAIN_NOW",
+          "SOB_AT_REST",
+          "SYNCOPE",
+          "COLD_SWEAT_OR_PALE",
+          "RADIATING_PAIN",
+          "VERY_LONG_DURATION",
+          "MULTIPLE_RISK_FACTORS"
+        ]
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "no_diagnosis_or_treatment"
+      ],
+      "properties": {
+        "no_diagnosis_or_treatment": {
+          "type": "boolean",
+          "const": true
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "model_family": {
+          "type": "string"
+        },
+        "model_variant": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "prompt_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
       }
     }
   }

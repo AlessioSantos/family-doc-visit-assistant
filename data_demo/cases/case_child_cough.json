@@ -1,35 +1,94 @@
 {
+  "meta": {
+    "schema_version": "1.0",
+    "language": "pl",
+    "created_at": "2026-02-18T10:00:00Z",
+    "source": "parent"
+  },
   "patient": {
     "age_years": 6,
-    "sex": "female"
+    "sex": "female",
+    "weight_kg": 22,
+    "is_child": true
   },
   "visit": {
-    "started_on_date": "2026-02-10",
-    "chief_complaint_category": "cough/cold (child)"
+    "today_date": "2026-02-18",
+    "started_on_date": "2026-02-15",
+    "chief_complaint_category": "cough_cold",
+    "chief_complaint_free_text": "Kaszel i katar u dziecka"
   },
   "timeline": {
     "events": [
       {
-        "date": "2026-02-10",
+        "date": "2026-02-15",
         "symptom_type": "cough",
         "change": "appeared",
         "character": "dry",
         "severity": "moderate"
       },
       {
-        "date": "2026-02-11",
+        "date": "2026-02-16",
         "symptom_type": "fever",
         "change": "appeared",
-        "character": "38.2C",
+        "character": "do 38.2C",
         "severity": "moderate"
       },
       {
-        "date": "2026-02-12",
+        "date": "2026-02-17",
         "symptom_type": "runny_nose",
         "change": "appeared",
         "character": "watery",
         "severity": "mild"
       }
     ]
+  },
+  "measurements": {
+    "temperature": {
+      "measured": true,
+      "unit": "C",
+      "graph": [
+        {
+          "date": "2026-02-16",
+          "time_of_day": "evening",
+          "value_c": 38.2,
+          "antipyretic_taken": "yes"
+        },
+        {
+          "date": "2026-02-17",
+          "time_of_day": "morning",
+          "value_c": 37.6,
+          "antipyretic_taken": "no"
+        }
+      ]
+    }
+  },
+  "modules": {
+    "respiratory": {
+      "cough_present": true,
+      "cough_type": "dry",
+      "runny_nose_present": true,
+      "runny_nose_type": "watery",
+      "breathing_difficulty": "no"
+    }
+  },
+  "history": {
+    "chronic_conditions": [],
+    "allergies": [],
+    "current_meds_supplements": [
+      "paracetamol (doraźnie)"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "audio_cough",
+      "label": "Kaszel - dzień 2",
+      "file_name": "cough_day2.m4a",
+      "mime_type": "audio/mp4",
+      "uri": "uploads/cough_day2.m4a"
+    }
+  ],
+  "risk_flags_rule_based": {
+    "risk_level": "LOW",
+    "flags": []
   }
 }

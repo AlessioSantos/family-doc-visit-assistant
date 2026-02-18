@@ -1,22 +1,72 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Intake",
+  "$id": "https://example.org/schemas/intake.schema.json",
+  "title": "FamilyDoctorIntake",
   "type": "object",
+  "additionalProperties": false,
   "required": [
+    "meta",
     "patient",
     "visit",
     "timeline"
   ],
   "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "language"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.0"
+        },
+        "language": {
+          "type": "string",
+          "enum": [
+            "pl",
+            "ru",
+            "uk",
+            "en",
+            "mixed"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "patient",
+            "parent",
+            "caregiver",
+            "staff",
+            "unknown"
+          ],
+          "default": "patient"
+        }
+      }
+    },
     "patient": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "age_years"
       ],
       "properties": {
+        "patient_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "age_years": {
           "type": "number",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 120
         },
         "sex": {
           "type": "string",
@@ -25,28 +75,74 @@
             "male",
             "other",
             "unknown"
-          ]
+          ],
+          "default": "unknown"
+        },
+        "weight_kg": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 300
+        },
+        "is_child": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Optional; can be derived from age < 18."
         }
       }
     },
     "visit": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
+        "today_date",
         "started_on_date",
         "chief_complaint_category"
       ],
       "properties": {
+        "today_date": {
+          "type": "string",
+          "format": "date"
+        },
         "started_on_date": {
           "type": "string",
           "format": "date"
         },
         "chief_complaint_category": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "cough_cold",
+            "fever",
+            "abdominal_pain",
+            "rash",
+            "chest_pain_sob",
+            "other"
+          ]
+        },
+        "chief_complaint_free_text": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 400
+        },
+        "first_visit_or_followup": {
+          "type": "string",
+          "enum": [
+            "first",
+            "followup"
+          ],
+          "default": "first"
         }
       }
     },
     "timeline": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "events"
       ],
@@ -56,6 +152,7 @@
           "minItems": 1,
           "items": {
             "type": "object",
+            "additionalProperties": false,
             "required": [
               "date",
               "symptom_type",
@@ -67,7 +164,22 @@
                 "format": "date"
               },
               "symptom_type": {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                  "cough",
+                  "runny_nose",
+                  "sore_throat",
+                  "fever",
+                  "abdominal_pain",
+                  "vomiting",
+                  "diarrhea",
+                  "rash",
+                  "chest_pain",
+                  "shortness_of_breath",
+                  "fatigue",
+                  "dizziness",
+                  "other"
+                ]
               },
               "change": {
                 "type": "string",
@@ -82,18 +194,506 @@
                 "type": [
                   "string",
                   "null"
-                ]
+                ],
+                "maxLength": 200
               },
               "severity": {
                 "type": [
                   "string",
                   "null"
+                ],
+                "enum": [
+                  "mild",
+                  "moderate",
+                  "severe",
+                  "unknown",
+                  null
+                ]
+              },
+              "notes": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 600
+              }
+            }
+          }
+        }
+      }
+    },
+    "measurements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "temperature": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "measured": {
+              "type": "boolean"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "C"
+              ],
+              "default": "C"
+            },
+            "graph": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "date",
+                  "time_of_day",
+                  "value_c"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "time_of_day": {
+                    "type": "string",
+                    "enum": [
+                      "morning",
+                      "day",
+                      "evening",
+                      "night"
+                    ]
+                  },
+                  "value_c": {
+                    "type": "number",
+                    "minimum": 30,
+                    "maximum": 45
+                  },
+                  "antipyretic_taken": {
+                    "type": "string",
+                    "enum": [
+                      "yes",
+                      "no",
+                      "unknown"
+                    ],
+                    "default": "unknown"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "modules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "respiratory": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cough_present": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "cough_type": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "dry",
+                "wet",
+                "paroxysmal",
+                "night_worse",
+                "unknown",
+                null
+              ]
+            },
+            "runny_nose_present": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "runny_nose_type": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "watery",
+                "thick",
+                "congestion_only",
+                "unknown",
+                null
+              ]
+            },
+            "breathing_difficulty": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "no",
+                "mild",
+                "moderate",
+                "severe",
+                "unknown",
+                null
+              ]
+            }
+          }
+        },
+        "rash": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "rash_present": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "location": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "face",
+                  "trunk",
+                  "arms",
+                  "legs",
+                  "hands",
+                  "feet",
+                  "genital",
+                  "other"
+                ]
+              }
+            },
+            "appearance": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "spots",
+                "dots",
+                "hives",
+                "blisters",
+                "other",
+                "unknown",
+                null
+              ]
+            },
+            "itching": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "yes",
+                "no",
+                "unknown",
+                null
+              ]
+            }
+          }
+        },
+        "abdominal_pain": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pain_present": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "location_zone_3x3": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "UL",
+                "UM",
+                "UR",
+                "ML",
+                "MM",
+                "MR",
+                "LL",
+                "LM",
+                "LR",
+                null
+              ]
+            },
+            "pain_type": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "cramping",
+                "stabbing",
+                "pulling",
+                "burning",
+                "other",
+                "unknown",
+                null
+              ]
+            },
+            "associated": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "vomiting": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "yes",
+                    "no",
+                    "unknown",
+                    null
+                  ]
+                },
+                "diarrhea": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "yes",
+                    "no",
+                    "unknown",
+                    null
+                  ]
+                },
+                "constipation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "yes",
+                    "no",
+                    "unknown",
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "triage_adult": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Short rule-based red-flag intake for adults with chest pain/shortness of breath/weakness.",
+          "properties": {
+            "chest_pain_now": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "shortness_of_breath_rest": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "fainting_or_syncope": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "cold_sweat_or_pale": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "pain_radiates_arm_jaw": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "duration_minutes": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0,
+              "maximum": 1440
+            },
+            "risk_factors": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "known_heart_disease",
+                  "hypertension",
+                  "diabetes",
+                  "smoking",
+                  "high_cholesterol",
+                  "family_history",
+                  "none",
+                  "unknown"
                 ]
               }
             }
           }
         }
       }
+    },
+    "history": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "chronic_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30
+        },
+        "allergies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30
+        },
+        "current_meds_supplements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50
+        }
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "audio_cough",
+              "photo_rash",
+              "other"
+            ]
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 80
+          },
+          "file_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mime_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "uri": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Local path or storage reference."
+          }
+        }
+      }
+    },
+    "risk_flags_rule_based": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "risk_level": {
+          "type": "string",
+          "enum": [
+            "LOW",
+            "MED",
+            "HIGH"
+          ],
+          "default": "LOW"
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20
+        }
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "visit": {
+            "properties": {
+              "chief_complaint_category": {
+                "const": "fever"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "measurements": {
+            "required": [
+              "temperature"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "visit": {
+            "properties": {
+              "chief_complaint_category": {
+                "const": "chest_pain_sob"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "modules": {
+            "required": [
+              "triage_adult"
+            ]
+          }
+        }
+      }
+    }
+  ]
 }
