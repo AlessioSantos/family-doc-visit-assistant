@@ -47,6 +47,38 @@ def add_missing(missing: list, msg: str):
     if msg not in missing:
         missing.append(msg)
 
+def compute_risk_flags(triage: dict):
+    flags = []
+
+    if triage.get("chest_pain_now"):
+        flags.append("CHEST_PAIN_NOW")
+    if triage.get("shortness_of_breath_rest"):
+        flags.append("SOB_AT_REST")
+    if triage.get("fainting_or_syncope"):
+        flags.append("SYNCOPE")
+    if triage.get("cold_sweat_or_pale"):
+        flags.append("COLD_SWEAT_OR_PALE")
+    if triage.get("pain_radiates_arm_jaw"):
+        flags.append("RADIATING_PAIN")
+
+    dur = triage.get("duration_minutes")
+    if isinstance(dur, int) and dur >= 20:
+        flags.append("VERY_LONG_DURATION")
+
+    rf = [x for x in (triage.get("risk_factors") or []) if x not in ("none", "unknown")]
+    if len(set(rf)) >= 2:
+        flags.append("MULTIPLE_RISK_FACTORS")
+
+    # Risk level
+    major = {"CHEST_PAIN_NOW", "SOB_AT_REST", "SYNCOPE", "COLD_SWEAT_OR_PALE", "RADIATING_PAIN"}
+    if any(f in major for f in flags):
+        level = "HIGH"
+    elif flags:
+        level = "MED"
+    else:
+        level = "LOW"
+
+    return level, flags
 
 # ---------- UI ----------
 st.title("Patient Intake (MVP) — Family doctor (child + adult)")
@@ -294,6 +326,13 @@ if chief == "rash":
 
 # Rule-based risk flags (filled later by our rules engine; here we keep placeholder)
 risk_flags_rule_based = {"risk_level": "LOW", "flags": []}
+
+if "triage_adult" in modules:
+    level, flags = compute_risk_flags(modules["triage_adult"])
+    risk_flags_rule_based = {"risk_level": level, "flags": flags}
+
+    if level == "HIGH":
+        st.error("PILNE: objawy alarmowe. Zadzwoń 112 / SOR. Nie czekaj na wizytę.")
 
 # Build intake
 intake = {
