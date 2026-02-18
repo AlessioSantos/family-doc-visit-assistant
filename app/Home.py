@@ -1,5 +1,8 @@
 import streamlit as st
 
+from dotenv import load_dotenv
+load_dotenv()
+
 st.set_page_config(page_title="Family Doctor Assistant (MVP)", layout="wide")
 
 st.title("Family Doctor Visit Assistant (MVP)")

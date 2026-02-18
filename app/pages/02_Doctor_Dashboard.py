@@ -98,7 +98,7 @@ if events:
         df_tl["date"] = pd.to_datetime(df_tl["date"], errors="coerce")
         df_tl = df_tl.sort_values("date")
         df_tl["date"] = df_tl["date"].dt.date.astype(str)
-    st.dataframe(df_tl, use_container_width=True)
+    st.dataframe(df_tl, width="stretch")
 else:
     st.info("No timeline events.")
 
@@ -114,7 +114,7 @@ if temp_graph:
     df_temp = df_temp.sort_values(["date", "tod_order"])
     df_temp["label"] = df_temp["date"].dt.strftime("%Y-%m-%d") + " " + df_temp["time_of_day"]
 
-    st.dataframe(df_temp[["label", "value_c", "antipyretic_taken"]], use_container_width=True)
+    st.dataframe(df_temp[["label", "value_c", "antipyretic_taken"]], width="stretch")
     chart_df = df_temp.set_index("label")[["value_c"]]
     st.line_chart(chart_df)
 else:
@@ -141,7 +141,7 @@ else:
         if a_type == "audio_cough":
             st.audio(p.read_bytes())
         elif a_type == "photo_rash":
-            st.image(str(p), caption=label, use_container_width=True)
+            st.image(str(p), caption=label, width="stretch")
         else:
             st.write(f"Stored at: {uri}")
 
