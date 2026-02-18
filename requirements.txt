@@ -1,0 +1,4 @@
+streamlit>=1.36
+pydantic>=2.7
+jsonschema>=4.22
+python-dotenv>=1.0

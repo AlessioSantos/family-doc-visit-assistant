@@ -1,0 +1,35 @@
+{
+  "patient": {
+    "age_years": 6,
+    "sex": "female"
+  },
+  "visit": {
+    "started_on_date": "2026-02-10",
+    "chief_complaint_category": "cough/cold (child)"
+  },
+  "timeline": {
+    "events": [
+      {
+        "date": "2026-02-10",
+        "symptom_type": "cough",
+        "change": "appeared",
+        "character": "dry",
+        "severity": "moderate"
+      },
+      {
+        "date": "2026-02-11",
+        "symptom_type": "fever",
+        "change": "appeared",
+        "character": "38.2C",
+        "severity": "moderate"
+      },
+      {
+        "date": "2026-02-12",
+        "symptom_type": "runny_nose",
+        "change": "appeared",
+        "character": "watery",
+        "severity": "mild"
+      }
+    ]
+  }
+}
