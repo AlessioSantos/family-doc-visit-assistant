@@ -9,3 +9,10 @@ build/
 .DS_Store
 .streamlit/secrets.toml
 uploads/
+# demo artifacts (generated)
+data_demo/outputs/
+data_demo/raw/
+data_demo/demo_report.json
+data_demo/demo_report.md
+last_model_raw.txt
+last_model_prompt.txt
