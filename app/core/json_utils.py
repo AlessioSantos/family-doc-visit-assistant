@@ -1,8 +1,7 @@
+import re
 import ast
 import json
-import re
 from typing import Any, Dict, List, Optional, Tuple
-
 
 EXPECTED_KEYS = {
     "summary",
@@ -15,7 +14,6 @@ EXPECTED_KEYS = {
     "risk_flags",
 }
 
-
 def _strip_code_fences(text: str) -> str:
     if not text:
         return ""
@@ -23,7 +21,6 @@ def _strip_code_fences(text: str) -> str:
     text = re.sub(r"```(?:json|JSON)?", "", text)
     text = text.replace("```", "")
     return text.strip()
-
 
 def _scan_top_level_json_object_spans(text: str) -> List[Tuple[int, int]]:
     """
@@ -65,7 +62,6 @@ def _scan_top_level_json_object_spans(text: str) -> List[Tuple[int, int]]:
 
     return spans
 
-
 def _parse_candidate(candidate: str) -> Optional[Dict[str, Any]]:
     """
     Try parse candidate as JSON dict; fallback to ast.literal_eval for dict-like outputs.
@@ -92,7 +88,6 @@ def _parse_candidate(candidate: str) -> Optional[Dict[str, Any]]:
         return None
     except Exception:
         return None
-
 
 def extract_json_object(text: str) -> Optional[Dict[str, Any]]:
     """

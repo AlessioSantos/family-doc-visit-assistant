@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "language": "pl",
+    "source": "parent",
+    "created_at": "2026-02-19T09:15:00Z"
+  },
+  "patient": {
+    "patient_id": null,
+    "age_years": 6,
+    "sex": "female",
+    "is_child": true,
+    "weight_kg": 21.0
+  },
+  "visit": {
+    "today_date": "2026-02-19",
+    "started_on_date": "2026-02-18",
+    "chief_complaint_category": "rash",
+    "chief_complaint_free_text": "Wysypka na tułowiu i policzkach, swędzi. Bez duszności.",
+    "first_visit_or_followup": "first"
+  },
+  "timeline": {
+    "events": [
+      {
+        "date": "2026-02-18",
+        "symptom_type": "rash",
+        "change": "appeared",
+        "severity": "moderate",
+        "character": "Plamki / spots",
+        "notes": "Pojawiło się wieczorem, po przedszkolu."
+      },
+      {
+        "date": "2026-02-19",
+        "symptom_type": "rash",
+        "change": "worsened",
+        "severity": "moderate",
+        "character": null,
+        "notes": "Rano więcej na tułowiu, dziecko drapie."
+      }
+    ]
+  },
+  "measurements": {
+    "temperature": {
+      "measured": true,
+      "unit": "C",
+      "graph": [
+        {
+          "date": "2026-02-19",
+          "time_of_day": "morning",
+          "value_c": 36.7,
+          "antipyretic_taken": "no"
+        }
+      ],
+      "note": "Brak gorączki."
+    }
+  },
+  "modules": {
+    "rash": {
+      "rash_present": true,
+      "location": [
+        "face",
+        "trunk",
+        "arms"
+      ],
+      "appearance": "spots",
+      "itching": "yes"
+    }
+  },
+  "history": {
+    "chronic_conditions": [
+      "atopic_dermatitis (mild)"
+    ],
+    "allergies": [],
+    "current_meds_supplements": []
+  },
+  "attachments": [
+    {
+      "file_name": "rash_photo_placeholder.jpg",
+      "mime_type": "image/jpeg",
+      "uri": "data_demo/assets/rash_photo_placeholder.jpg",
+      "label": "rash_photo"
+    }
+  ],
+  "risk_flags_rule_based": {
+    "risk_level": "LOW",
+    "flags": []
+  }
+}

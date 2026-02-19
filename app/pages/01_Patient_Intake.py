@@ -1,10 +1,8 @@
 import json
 import uuid
+import streamlit as st
 from pathlib import Path
 from datetime import date, datetime, timezone
-
-import streamlit as st
-
 
 # ---------- helpers ----------
 UPLOAD_DIR = Path("uploads")
@@ -13,12 +11,10 @@ UPLOAD_DIR = Path("uploads")
 def now_iso():
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
-
 def ensure_session_defaults():
     st.session_state.setdefault("timeline_events", [])
     st.session_state.setdefault("temp_rows", [])
     st.session_state.setdefault("attachments", [])
-
 
 def save_upload(uploaded_file, prefix: str) -> dict:
     """Save uploaded file to uploads/ and return attachment object for Intake JSON."""
@@ -41,7 +37,6 @@ def save_upload(uploaded_file, prefix: str) -> dict:
         "mime_type": uploaded_file.type,
         "uri": str(path).replace("\\", "/"),
     }
-
 
 def add_missing(missing: list, msg: str):
     if msg not in missing:

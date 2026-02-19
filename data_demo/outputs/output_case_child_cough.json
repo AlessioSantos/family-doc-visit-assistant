@@ -1,0 +1,21 @@
+{
+  "summary": "6-year-old female presents with a 2-day history of dry cough and runny nose, accompanied by a moderate fever that appeared on the second day. No respiratory difficulty reported.",
+  "draft_note": "The patient is a 6-year-old female with a 2-day history of dry cough and watery runny nose. She developed a moderate fever (up to 38.2°C) on the second day. No respiratory difficulty is reported.\n\nPLAN (do uzupełnienia przez lekarza):\n- [ ]",
+  "missing_info": [],
+  "followup_questions": [],
+  "risk_level": "LOW",
+  "risk_flags": [],
+  "safety": {
+    "no_diagnosis_or_treatment": true,
+    "notes": [
+      "Human-in-the-loop: clinician must verify.",
+      "Plan section is a placeholder; clinician must fill in. Treatment-like language removed from AI draft."
+    ]
+  },
+  "provenance": {
+    "model_family": "transformers",
+    "model_variant": "",
+    "prompt_version": "step5",
+    "generated_at": "2026-02-19T16:13:52Z"
+  }
+}

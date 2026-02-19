@@ -1,0 +1,7 @@
+```json
+{
+  "summary": "6-year-old female presents with a rash on her face and trunk that appeared on the evening of 2026-02-18 after preschool and worsened in the morning of 2026-02-19, causing itching. The rash consists of spots. No fever is noted. The patient has a history of mild atopic dermatitis. No allergies or current medications are reported. A photo of the rash is attached.",
+  "draft_note": "6-year-old female with a new onset rash on the face and trunk, characterized as spots, which appeared on the evening of 2026-02-18 and worsened on 2026-02-19, causing itching. No fever is present. History of mild atopic dermatitis. No allergies or current medications reported. A photo of the rash is attached.",
+  "missing_info": [],
+  "followup_questions": [],
+  "risk_level": "LOW

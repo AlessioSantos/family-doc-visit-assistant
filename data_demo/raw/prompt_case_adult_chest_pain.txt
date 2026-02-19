@@ -1,3 +1,4 @@
+SYSTEM:
 You are a clinical documentation assistant for family medicine (adults and children).
 
 GOAL
@@ -37,3 +38,21 @@ CONTENT RULES
 FINAL CHECK BEFORE YOU ANSWER
 - Confirm your output is a single valid JSON object and fully matches the Output schema.
 - Confirm there is no extra text before "{" or after "}".
+
+USER:
+Return ONLY the JSON below. Keep the same keys. Fill values using ONLY the Intake JSON. Use "unknown" if missing.
+Do NOT add any text outside JSON.
+
+{
+  "summary": "",
+  "draft_note": "",
+  "missing_info": [],
+  "followup_questions": [],
+  "risk_level": "HIGH",
+  "risk_flags": ["CHEST_PAIN_NOW", "SOB_AT_REST", "COLD_SWEAT_OR_PALE", "RADIATING_PAIN"],
+  "safety": {"no_diagnosis_or_treatment": true, "notes": ["Human-in-the-loop: clinician must verify."]},
+  "provenance": {"model_family": "transformers", "model_variant": "", "prompt_version": "step5", "generated_at": ""}
+}
+
+Intake JSON:
+{"meta": {"schema_version": "1.0", "language": "pl", "created_at": "2026-02-18T10:10:00Z", "source": "patient"}, "patient": {"age_years": 57, "sex": "male", "is_child": false}, "visit": {"today_date": "2026-02-18", "started_on_date": "2026-02-18", "chief_complaint_category": "chest_pain_sob", "chief_complaint_free_text": "Ból w klatce piersiowej i duszność"}, "timeline": {"events": [{"date": "2026-02-18", "symptom_type": "chest_pain", "change": "appeared", "character": "ucisk, trwa 30 min", "severity": "severe"}, {"date": "2026-02-18", "symptom_type": "shortness_of_breath", "change": "appeared", "character": "w spoczynku", "severity": "severe"}]}, "modules": {"triage_adult": {"chest_pain_now": true, "shortness_of_breath_rest": true, "fainting_or_syncope": false, "cold_sweat_or_pale": true, "pain_radiates_arm_jaw": true, "duration_minutes": 30, "risk_factors": ["hypertension", "smoking"]}}, "history": {"chronic_conditions": ["nadciśnienie"], "allergies": [], "current_meds_supplements": []}, "risk_flags_rule_based": {"risk_level": "HIGH", "flags": ["CHEST_PAIN_NOW", "SOB_AT_REST", "COLD_SWEAT_OR_PALE", "RADIATING_PAIN"]}}
