@@ -93,6 +93,11 @@ This MVP was shaped by a short questionnaire study with practicing physicians in
 Their answers highlighted the same pain points: routine documentation, bureaucracy, and time taken away from patient care.
 Based on those responses, the assistant was designed to structure pre-visit narratives and reduce “free-text noise” in clinical notes.
 
+## Demo script
+
+Step-by-step instructions for reviewers:
+- `docs/demo_script.md`
+
 ## Survey notes
 
 A short, anonymized summary of the questionnaire study (Poland) and how it shaped the MVP:
