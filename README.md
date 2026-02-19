@@ -99,12 +99,19 @@ Step-by-step instructions for reviewers:
 - `docs/demo_script.md`
 
 ## UI preview
+
 ![UI screenshot](docs/ui_screenshot_0.png)
+
+<details>
+  <summary>More screenshots</summary>
+
+![UI screenshot](docs/ui_screenshot_1.png)
 ![UI screenshot](docs/ui_screenshot_2.png)
 ![UI screenshot](docs/ui_screenshot_3.png)
 ![UI screenshot](docs/ui_screenshot_4.png)
 ![UI screenshot](docs/ui_screenshot_5.png)
-![UI screenshot](docs/ui_screenshot_6.png)
+
+</details>
 
 ## Survey notes
 
