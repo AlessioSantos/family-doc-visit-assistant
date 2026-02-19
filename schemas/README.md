@@ -1,17 +1,33 @@
-# Data contract (v1)
+# Data Contract (Schemas)
 
-Copy into your repo:
+This folder defines the **JSON contract** between the intake payload and the generated clinical documentation output.
 
-- `schemas/intake.schema.json`
-- `schemas/output.schema.json`
+See the project root `README.md` for how to run the demo runner and validate outputs.
 
-Demo cases (synthetic):
+---
 
-- `data_demo/cases/case_child_cough.json`
-- `data_demo/cases/case_adult_chest_pain.json`
+## Files
 
-Rules:
+- `intake.schema.json` — schema for the **patient/parent intake JSON**
+- `output.schema.json` — schema for the **assistant Output JSON** (what the model must produce)
+
+---
+
+## Demo validation
+
+The demo runner validates model outputs against the Output schema:
+
+```powershell
+python scripts/run_demo.py
+```
+
+---
+
+## Practical rules (v1)
+
 - Timeline is **by dates** (required).
-- If `chief_complaint_category = fever` → `measurements.temperature` required.
-- If `chief_complaint_category = chest_pain_sob` → `modules.triage_adult` required.
-- Model output must include `safety.no_diagnosis_or_treatment = true`.
+- If `chief_complaint_category = fever` → `measurements.temperature` is required.
+- If `chief_complaint_category = chest_pain_sob` → adult triage module is required (see schema).
+- Output must include `safety.no_diagnosis_or_treatment = true`.
+
+If a required detail is missing in the intake, the assistant must use `"unknown"` and ask a focused follow-up question.
