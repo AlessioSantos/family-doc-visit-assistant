@@ -1,33 +1,27 @@
-import json
 import os
 import re
-from datetime import datetime, timezone
-from functools import lru_cache
-from pathlib import Path
-from typing import Any, Dict, Tuple
+import json
 import streamlit as st
-
+from pathlib import Path
+from functools import lru_cache
 from jsonschema import validate
-from jsonschema.exceptions import ValidationError
-
+from typing import Any, Dict, Tuple
+from datetime import datetime, timezone
 from .json_utils import extract_json_object
-
+from jsonschema.exceptions import ValidationError
 
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
-
 def _load_text(path: str) -> str:
     with open(path, "r", encoding="utf-8") as f:
         return f.read()
-
 
 def _render_template(tpl: str, **kwargs) -> str:
     out = tpl
     for k, v in kwargs.items():
         out = out.replace("{{" + k + "}}", v)
     return out
-
 
 def _call_stub(prompt: str) -> str:
     return json.dumps(
@@ -48,7 +42,6 @@ def _call_stub(prompt: str) -> str:
         },
         ensure_ascii=False,
     )
-
 
 # --- caching for Streamlit reruns ---
 try:
@@ -131,7 +124,6 @@ def _call_transformers(system_prompt: str, user_prompt: str, max_new_tokens: int
     text = tokenizer.decode(gen_tokens, skip_special_tokens=True)
     return text.strip()
 
-
 _TREATMENT_RE = re.compile(
     r"\b("
     r"zalec\w*|zaleceni\w*|leczen\w*|lecz\w*|terapi\w*|"
@@ -143,7 +135,6 @@ _TREATMENT_RE = re.compile(
     re.IGNORECASE,
 )
 
-
 def _strip_treatment_sentences(text: str) -> str:
     if not text:
         return text
@@ -152,7 +143,6 @@ def _strip_treatment_sentences(text: str) -> str:
     kept = [s for s in parts if s and not _TREATMENT_RE.search(s)]
     return " ".join(kept).strip()
 
-
 def _ensure_plan_placeholder(note: str) -> str:
     if not note:
         note = ""
@@ -160,7 +150,6 @@ def _ensure_plan_placeholder(note: str) -> str:
         return note.strip()
     suffix = "\n\nPLAN (do uzupełnienia przez lekarza):\n- [ ]"
     return (note.strip() + suffix).strip()
-
 
 def generate_output(
     intake: Dict[str, Any],
@@ -175,7 +164,7 @@ def generate_output(
     """
     provider = os.getenv("MODEL_PROVIDER", "stub").strip().lower()
     retries = int(os.getenv("RETRIES", "2"))
-    max_new_tokens = int(os.getenv("MAX_NEW_TOKENS", "800"))
+    max_new_tokens = int(os.getenv("MAX_NEW_TOKENS", "2000"))
 
     system_path = os.path.join(prompts_dir, "system.md")
     user_path = os.path.join(prompts_dir, "user_template.md")
@@ -188,7 +177,17 @@ def generate_output(
         RISK_FLAGS=json.dumps(risk_flags, ensure_ascii=False),
         INTAKE_JSON=json.dumps(intake, ensure_ascii=False),
     )
-
+    # --- debug: save last prompt (demo) ---
+    try:
+        if os.getenv("SAVE_LAST_PROMPT", "0").strip().lower() in {"1", "true", "yes"}:
+            from pathlib import Path
+            Path("last_model_prompt.txt").write_text(
+                "SYSTEM:\n" + system_prompt + "\n\nUSER:\n" + user_prompt,
+                encoding="utf-8"
+            )
+    except Exception:
+        pass
+    # --------------------------------------
     last_text = ""
     last_err = ""
 

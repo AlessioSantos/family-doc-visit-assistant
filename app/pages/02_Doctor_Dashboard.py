@@ -1,13 +1,10 @@
+import sys
 import json
-from pathlib import Path
-
-import streamlit as st
 import pandas as pd
+import streamlit as st
+from pathlib import Path
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
-
-import sys
-from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]  # корень проекта
 if str(ROOT) not in sys.path:
@@ -15,11 +12,9 @@ if str(ROOT) not in sys.path:
 
 from app.core.generator import generate_output
 
-
 BASE = Path(__file__).resolve().parents[2]
 INTAKE_SCHEMA_PATH = BASE / "schemas" / "intake.schema.json"
 OUTPUT_SCHEMA_PATH = BASE / "schemas" / "output.schema.json"
-
 
 def safe_get(d, *keys, default=None):
     cur = d
@@ -29,17 +24,14 @@ def safe_get(d, *keys, default=None):
         cur = cur[k]
     return cur
 
-
 def load_json_schema(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
-
 
 def file_exists(uri: str) -> bool:
     try:
         return Path(uri).exists()
     except Exception:
         return False
-
 
 st.title("Doctor Dashboard (MVP)")
 

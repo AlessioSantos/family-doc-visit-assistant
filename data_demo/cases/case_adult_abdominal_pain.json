@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "language": "ru",
+    "source": "patient",
+    "created_at": "2026-02-19T09:10:00Z"
+  },
+  "patient": {
+    "patient_id": null,
+    "age_years": 34,
+    "sex": "male",
+    "is_child": false,
+    "weight_kg": 82.0
+  },
+  "visit": {
+    "today_date": "2026-02-19",
+    "started_on_date": "2026-02-17",
+    "chief_complaint_category": "abdominal_pain",
+    "chief_complaint_free_text": "Схваткообразная боль в животе, больше по центру и иногда справа внизу. После еды усиливается.",
+    "first_visit_or_followup": "first"
+  },
+  "timeline": {
+    "events": [
+      {
+        "date": "2026-02-17",
+        "symptom_type": "abdominal_pain",
+        "change": "appeared",
+        "severity": "moderate",
+        "character": "Спазмы, 6/10, волнами",
+        "notes": "Началось вечером после плотного ужина."
+      },
+      {
+        "date": "2026-02-18",
+        "symptom_type": "vomiting",
+        "change": "appeared",
+        "severity": "mild",
+        "character": null,
+        "notes": "Однократно ночью."
+      },
+      {
+        "date": "2026-02-19",
+        "symptom_type": "abdominal_pain",
+        "change": "worsened",
+        "severity": "moderate",
+        "character": "Иногда отдаёт вправо вниз",
+        "notes": "Утром хуже, аппетит снижен."
+      }
+    ]
+  },
+  "measurements": {
+    "temperature": {
+      "measured": true,
+      "unit": "C",
+      "graph": [
+        {
+          "date": "2026-02-18",
+          "time_of_day": "evening",
+          "value_c": 36.9,
+          "antipyretic_taken": "no"
+        },
+        {
+          "date": "2026-02-19",
+          "time_of_day": "morning",
+          "value_c": 37.1,
+          "antipyretic_taken": "no"
+        }
+      ],
+      "note": "Температура измерялась, выраженной лихорадки нет."
+    }
+  },
+  "modules": {
+    "abdominal_pain": {
+      "pain_present": true,
+      "location_zone_3x3": "MM",
+      "pain_type": "cramping",
+      "triggers": [
+        "after_meals",
+        "movement"
+      ],
+      "associated": {
+        "vomiting": "yes",
+        "diarrhea": "no",
+        "constipation": "unknown"
+      }
+    }
+  },
+  "history": {
+    "chronic_conditions": [],
+    "allergies": [],
+    "current_meds_supplements": [
+      "Дротаверин 40 мг (1 таб.)"
+    ]
+  },
+  "attachments": [],
+  "risk_flags_rule_based": {
+    "risk_level": "LOW",
+    "flags": []
+  }
+}
