@@ -1,9 +1,0 @@
-```json
-{
-  "summary": "3-year-old female presents with cough, cold symptoms, and night fever. Cough is worse at night. Runny nose is present. No breathing difficulty. No chronic conditions or allergies reported. No current medications. Temperature was 37.7°C on Feb 16th and 37.3°C on Feb 17th. No antipyretics were taken.",
-  "draft_note": "3-year-old female with cough, cold symptoms, and night fever. Cough is worse at night. Runny nose is present. No breathing difficulty. No chronic conditions or allergies reported. No current medications. Temperature was 37.7°C on Feb 16th and 37.3°C on Feb 17th. No antipyretics were taken.",
-  "missing_info": [],
-  "followup_questions": [],
-  "risk_level": "LOW",
-  "risk_flags": [],
-  "safety
