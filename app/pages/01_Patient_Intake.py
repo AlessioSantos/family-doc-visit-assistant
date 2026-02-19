@@ -83,7 +83,7 @@ ensure_session_defaults()
 
 # META
 with st.expander("Meta (optional)", expanded=False):
-    lang = st.selectbox("Language / Język", ["pl", "ru", "uk", "en", "mixed"], index=0)
+    lang = st.selectbox("Language / Język", ["pl", "ru", "ua", "en", "mixed"], index=0)
     source = st.selectbox("Who fills this form?", ["patient", "parent", "caregiver", "staff", "unknown"], index=0)
 
 # PATIENT

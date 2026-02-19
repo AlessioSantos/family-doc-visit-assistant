@@ -98,6 +98,14 @@ Based on those responses, the assistant was designed to structure pre-visit narr
 Step-by-step instructions for reviewers:
 - `docs/demo_script.md`
 
+## UI preview
+![UI screenshot](docs/ui_screenshot_0.png)
+![UI screenshot](docs/ui_screenshot_2.png)
+![UI screenshot](docs/ui_screenshot_3.png)
+![UI screenshot](docs/ui_screenshot_4.png)
+![UI screenshot](docs/ui_screenshot_5.png)
+![UI screenshot](docs/ui_screenshot_6.png)
+
 ## Survey notes
 
 A short, anonymized summary of the questionnaire study (Poland) and how it shaped the MVP:
