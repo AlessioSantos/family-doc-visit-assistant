@@ -2,3 +2,11 @@ streamlit>=1.36
 pydantic>=2.7
 jsonschema>=4.22
 python-dotenv>=1.0
+
+transformers>=4.50.0
+accelerate>=0.0
+huggingface-hub>=0.0
+torch>=2.0
+torchvision>=0.0
+Pillow>=10.0
+sentencepiece>=0.0
