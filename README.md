@@ -87,6 +87,12 @@ streamlit run app/Home.py
 - No invented facts: missing details are marked as `"unknown"` and asked as follow-up questions.
 - Human review required: outputs are drafts for documentation only.
 
+## Why this exists (real-world validation)
+
+This MVP was shaped by a short questionnaire study with practicing physicians in Poland.
+Their answers highlighted the same pain points: routine documentation, bureaucracy, and time taken away from patient care.
+Based on those responses, the assistant was designed to structure pre-visit narratives and reduce “free-text noise” in clinical notes.
+
 ---
 
 ## License
